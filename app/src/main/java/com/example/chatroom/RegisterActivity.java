@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button CreateAccountButton;
@@ -39,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         AlreadyHaveAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SendUserToLoginActivity();
+                finish();
             }
         });
 
@@ -58,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this,"Please fill e-mail and password",Toast.LENGTH_SHORT).show();
         }else{
             loadingBar.setTitle("Creating new account...");
-            loadingBar.setMessage("Please wait while we are creating your new account");
+            loadingBar.setMessage("Please wait while we are creating your account.");
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();
 
@@ -66,28 +70,33 @@ public class RegisterActivity extends AppCompatActivity {
               .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                   @Override
                   public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        SendUserToLoginActivity();
-                        Toast.makeText(RegisterActivity.this, "Account created successfully...", Toast.LENGTH_SHORT).show();
-                        loadingBar.dismiss();
-                    }else{
+
+                      if(task.isSuccessful()) {
+
+
+                          mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                              @Override
+                              public void onComplete(@NonNull Task<Void> task) {
+                                  if(task.isSuccessful()){
+                                      Toast.makeText(RegisterActivity.this, "Verification E-mail sent successfully.", Toast.LENGTH_SHORT).show();
+                                  }else{
+                                      Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                  }
+                              }
+                          });
+
+
+                          Toast.makeText(RegisterActivity.this, "Account created successfully...", Toast.LENGTH_SHORT).show();
+                      }else {
                         String message = task.getException().toString();
-                        Toast.makeText(RegisterActivity.this, "Error : "+message, Toast.LENGTH_SHORT).show();
-                        loadingBar.dismiss();
-                    }
+                        Toast.makeText(RegisterActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                      }
+                      loadingBar.dismiss();
+
+
                   }
               });
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-        startActivity(intent);
-        finish();
-        System.exit(0);
     }
 
     private void InitializeFields() {
@@ -98,8 +107,4 @@ public class RegisterActivity extends AppCompatActivity {
         loadingBar = new ProgressDialog(this);
     }
 
-    private void SendUserToLoginActivity() {
-        Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(loginIntent);
-    }
 }

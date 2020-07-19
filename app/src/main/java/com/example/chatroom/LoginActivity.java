@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         InitializeFields();
+
         NeedNewAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
                 AllowUserToLogin();
             }
         });
+
+
     }
 
     private void AllowUserToLogin(){
@@ -68,15 +75,30 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                           if(task.isSuccessful()){
-                               SendUserToMainActivity();
-                               Toast.makeText(LoginActivity.this, "Logged in successful", Toast.LENGTH_SHORT).show();
-                               loadingBar.dismiss();
-                           }else{
+                           if(task.isSuccessful()) {
+
+                               if(mAuth.getCurrentUser().isEmailVerified()){
+                                   SendUserToMainActivity();
+                                   Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+                               }else{
+                                   Toast.makeText(LoginActivity.this, "Please verify your E-mail address first.", Toast.LENGTH_LONG).show();
+                                   mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+                                           if(task.isSuccessful()){
+                                               Toast.makeText(LoginActivity.this, "Verification E-mail sent successfully.", Toast.LENGTH_SHORT).show();
+                                           }else{
+                                               Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+                                   });
+                               }
+
+                           } else {
                                String message = task.getException().toString();
-                               Toast.makeText(LoginActivity.this, "Error : "+message, Toast.LENGTH_SHORT).show();
-                               loadingBar.dismiss();
+                               Toast.makeText(LoginActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
                            }
+                            loadingBar.dismiss();
                         }
                     });
         }
@@ -105,10 +127,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(currentUser!=null){
+        if(currentUser!=null) {
             SendUserToMainActivity();
         }
     }
+
 
     private void SendUserToMainActivity() {
         Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
@@ -119,6 +142,5 @@ public class LoginActivity extends AppCompatActivity {
         Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(registerIntent);
     }
-
 
 }
