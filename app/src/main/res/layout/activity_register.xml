@@ -4,72 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f3ecc2"
     tools:context=".RegisterActivity">
 
     <ImageView
         android:id="@+id/register_image"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:src="@drawable/signup_photo"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:src="@drawable/signup_photo" />
 
     <EditText
         android:id="@+id/register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/register_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="17dp"
+        android:background="@drawable/inputs"
+        android:drawableStart="@drawable/email"
         android:hint="e-mail"
         android:inputType="textEmailAddress"
-        android:background="@drawable/inputs"
-        android:padding="4dp"
-        android:drawableStart="@drawable/email"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp"/>
+        android:padding="4dp" />
+
     <EditText
         android:id="@+id/register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/register_email"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="17dp"
+        android:background="@drawable/inputs"
+        android:drawableStart="@drawable/password"
         android:hint="password"
         android:inputType="textPassword"
-        android:background="@drawable/inputs"
-        android:padding="4dp"
-        android:drawableStart="@drawable/password"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp"/>
+        android:padding="4dp" />
+
     <Button
         android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/register_password"
-        android:padding="4dp"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="19dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="19dp"
+        android:background="@drawable/buttons"
+        android:padding="4dp"
         android:text="Create Account"
-        android:textSize="23sp"
-        android:textColor="@android:color/background_light"
         android:textAllCaps="false"
-        android:background="@drawable/buttons"/>
+        android:textColor="@android:color/background_light"
+        android:textSize="23sp" />
+
     <TextView
         android:id="@+id/already_have_account_link"
-        android:text="Already have an account ?"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/register_button"
-        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="23dp"
+        android:text="Already have an account ?"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="17sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>
