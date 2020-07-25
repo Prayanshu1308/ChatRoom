@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5e6f64"
+    android:background="@drawable/gradient3"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,7 +14,7 @@
 
         <include
             android:id="@+id/main_page_toolbar"
-            layout="@layout/app_bar_layout"></include>
+            layout="@layout/app_bar_layout"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/main_tabs"
@@ -24,7 +24,7 @@
             app:tabIndicatorColor="#ff9c71"
             app:tabIndicatorHeight="3dp"
             app:tabSelectedTextColor="#ffbd69"
-            app:tabTextColor="#e7dfd5"></com.google.android.material.tabs.TabLayout>
+            app:tabTextColor="#e7dfd5"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,6 +32,6 @@
         android:id="@+id/main_tabs_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appBarLayout"></androidx.viewpager.widget.ViewPager>
+        android:layout_below="@+id/appBarLayout" />
 
 </RelativeLayout>
