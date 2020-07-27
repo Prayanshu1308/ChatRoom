@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             RequestNewGroup();
         }
         if (item.getItemId()==R.id.main_find_friends_options){
-
+            SendUserToFindFriendsActivity();
         }
         return true;
     }
@@ -197,5 +197,10 @@ public class MainActivity extends AppCompatActivity {
         settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
         finish();
+    }
+
+    public void SendUserToFindFriendsActivity(){
+        Intent FindFriendsIntent = new Intent(MainActivity.this, FindFriendsActivity.class);
+        startActivity(FindFriendsIntent);
     }
 }
