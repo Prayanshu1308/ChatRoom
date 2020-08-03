@@ -48,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
         RootRef = FirebaseDatabase.getInstance().getReference();
 
         if(currentUser==null){
+            // that is, currentUser has no data,i.e, not created his account yet
             SendUserToLoginActivity();
         }else{
             if(!currentUser.isEmailVerified()){
                 SendUserToLoginActivity();
             }
-
         }
 
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 mAuth.signOut();
                 SendUserToLoginActivity();
             }else {
+                // to check whether the user has a UserName or not
                 VerifyUserExistence();
             }
         }
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
         builder.setTitle("Enter group name : ");
         final EditText groupNameField = new EditText(MainActivity.this);
-        groupNameField.setHint("e.g Friends Zone");
+        groupNameField.setHint("e.g., Friends Zone");
         builder.setView(groupNameField);
         builder.setCancelable(false);
 
