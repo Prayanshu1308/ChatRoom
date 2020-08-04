@@ -116,6 +116,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private void GetUserInfo() {
 
         UserRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
@@ -125,7 +126,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -162,6 +162,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
     private void DisplayMessages(DataSnapshot dataSnapshot) {
         Iterator iterator = dataSnapshot.getChildren().iterator();
+
         while(iterator.hasNext()){
             String chatDate = (String) ((DataSnapshot)iterator.next()).getValue();
             String chatMessage = (String) ((DataSnapshot)iterator.next()).getValue();

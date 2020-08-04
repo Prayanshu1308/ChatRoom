@@ -1,5 +1,7 @@
 package com.example.chatroom;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,7 +32,7 @@ public class RequestsFragment extends Fragment {
     private View RequestFragmentView;
     private RecyclerView myRequestsList;
 
-    private DatabaseReference ChatRequestsRef, UsersRef;
+    private DatabaseReference ChatRequestsRef, UsersRef, ContactsRef;
     private FirebaseAuth mAuth;
     private String currentUserID;
 
@@ -67,7 +70,7 @@ public class RequestsFragment extends Fragment {
         FirebaseRecyclerAdapter<Contacts,RequestViewHolder> adapter =
                 new FirebaseRecyclerAdapter<Contacts, RequestViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull RequestViewHolder holder, int position, @NonNull Contacts model) {
+                    protected void onBindViewHolder(@NonNull final RequestViewHolder holder, int position, @NonNull Contacts model) {
 
                         holder.itemView.findViewById(R.id.request_accept_button).setVisibility(View.VISIBLE);
                         holder.itemView.findViewById(R.id.request_cancel_button).setVisibility(View.VISIBLE);
@@ -81,18 +84,51 @@ public class RequestsFragment extends Fragment {
                                 if (snapshot.exists()){
                                     String type = snapshot.getValue().toString();
                                     if(type.equals("received")){
-                                        UsersRef.addValueEventListener(new ValueEventListener() {
+                                        UsersRef.child(list_user_id).addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                                                 if (snapshot.hasChild("image")){
 
-                                                    final String requestUserName = snapshot.child("name").getValue().toString();
-                                                    final String requestUserStatus = snapshot.child("status").getValue().toString();
                                                     final String requestProfileImage = snapshot.child("image").getValue().toString();
-
-                                                }else {
+                                                    Picasso.get().load(requestProfileImage).into(holder.profileImage);
 
                                                 }
+
+                                                final String requestUserName = snapshot.child("name").getValue().toString();
+                                                final String requestUserStatus = snapshot.child("status").getValue().toString();
+
+                                                holder.userName.setText(requestUserName);
+                                                holder.userStatus.setText(requestUserStatus);
+
+
+                                                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        CharSequence options[] = new CharSequence[]
+                                                                {
+                                                                        "Accept",
+                                                                        "Cancel"
+                                                                };
+
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                        builder.setTitle(requestUserName + " Chat Request");
+
+                                                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                                if (i==0){
+
+                                                                }
+                                                                if(i==1){
+
+                                                                }
+                                                            }
+                                                        });
+
+                                                    }
+                                                });
+
                                             }
 
                                             @Override
@@ -120,6 +156,10 @@ public class RequestsFragment extends Fragment {
                         return holder;
                     }
                 };
+
+        myRequestsList.setAdapter(adapter);
+        adapter.startListening();
+
 
     }
 

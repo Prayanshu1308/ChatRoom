@@ -8,9 +8,7 @@
 
     <include
         android:id="@+id/group_chat_bar_layout"
-        layout="@layout/app_bar_layout"
-        >
-    </include>
+        layout="@layout/app_bar_layout"/>
 
     <ScrollView
         android:id="@+id/my_scroll_view"
@@ -22,8 +20,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/group_chat_text_display"
@@ -56,15 +53,14 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="write your message here..."
-            android:padding="17dp"
-            />
+            android:padding="17dp" />
+
         <ImageButton
             android:id="@+id/send_message_button"
             android:layout_width="0dp"
             android:layout_weight="0.15"
-            android:layout_height="wrap_content"
-            android:src="@drawable/send_message"
-            />
+            android:layout_height="match_parent"
+            android:src="@drawable/send_message" />
 
     </LinearLayout>
 
