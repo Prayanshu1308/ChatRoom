@@ -74,6 +74,7 @@ public class ContactsFragment extends Fragment {
                 UsersRef.child(usersIds).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                         if (snapshot.hasChild("image")){
                             String userImage = snapshot.child("image").getValue().toString();
                             String profileName = snapshot.child("name").getValue().toString();

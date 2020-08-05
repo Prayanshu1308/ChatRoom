@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="#ff42959a"
     tools:context=".LoginActivity">
 
     <ScrollView
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/forget_password_link"
                 android:layout_marginLeft="19dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="35dp"
                 android:layout_marginRight="19dp"
                 android:background="@drawable/buttons"
                 android:padding="4dp"

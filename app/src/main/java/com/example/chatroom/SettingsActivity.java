@@ -3,6 +3,7 @@ package com.example.chatroom;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -49,6 +50,8 @@ public class SettingsActivity extends AppCompatActivity {
     private StorageReference UserProfileImageRef;
     private ProgressDialog loadingBar;
 
+    private Toolbar SettingsToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +91,13 @@ public class SettingsActivity extends AppCompatActivity {
         userStatus = (EditText) findViewById(R.id.set_profile_status);
         userProfileImage = (CircleImageView) findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
+
+        SettingsToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        setSupportActionBar(SettingsToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle("Settings");
+
     }
 
     @Override
@@ -193,13 +203,13 @@ public class SettingsActivity extends AppCompatActivity {
         String setStatus = userStatus.getText().toString();
 
         if (TextUtils.isEmpty(setUserName)){
-            Toast.makeText(this, "Please write your user_name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please type your user_name", Toast.LENGTH_SHORT).show();
         }else{
-            HashMap<String, String> profileMap = new HashMap<>();
+            HashMap<String, Object> profileMap = new HashMap<>();
               profileMap.put("uid", currentUserID);
               profileMap.put("name", setUserName);
               profileMap.put("status", setStatus);
-            RootRef.child("Users").child(currentUserID).setValue(profileMap)
+            RootRef.child("Users").child(currentUserID).updateChildren(profileMap)
               .addOnCompleteListener(new OnCompleteListener<Void>() {
                   @Override
                   public void onComplete(@NonNull Task<Void> task) {

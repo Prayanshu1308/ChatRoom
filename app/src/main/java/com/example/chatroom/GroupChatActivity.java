@@ -155,7 +155,7 @@ public class GroupChatActivity extends AppCompatActivity {
               messageInfoMap.put("message",message);
               messageInfoMap.put("date",currentDate);
               messageInfoMap.put("time",currentTime);
-             GroupMessageKeyRef.updateChildren(messageInfoMap);
+              GroupMessageKeyRef.updateChildren(messageInfoMap);
 
         }
     }
