@@ -30,10 +30,11 @@
         <EditText
             android:id="@+id/input_message"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="type message here..."
-            android:padding="15dp"/>
+            android:padding="15dp"
+            android:background="#e3dfc8"/>
 
         <ImageButton
             android:id="@+id/send_message_btn"
