@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#888888"
     tools:context=".ChatActivity">
 
     <include
@@ -16,7 +17,8 @@
         android:id="@+id/private_messages_list_of_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/chat_toolbar"/>
+        android:layout_below="@+id/chat_toolbar"
+        android:layout_above="@+id/chat_linear_layout"/>
 
     <LinearLayout
         android:id="@+id/chat_linear_layout"
@@ -24,8 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/background_light"
-        android:orientation="horizontal">
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
 
         <EditText
             android:id="@+id/input_message"
@@ -34,13 +37,13 @@
             android:layout_weight="1"
             android:hint="type message here..."
             android:padding="15dp"
-            android:background="#e3dfc8"/>
+            android:textColor="#FFFFFF"/>
 
         <ImageButton
             android:id="@+id/send_message_btn"
             android:layout_width="0dp"
             android:layout_weight="0.15"
-            android:layout_height="match_parent"
+            android:layout_height="55dp"
             android:src="@drawable/send_message"/>
 
     </LinearLayout>

@@ -79,9 +79,11 @@ public class GroupsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Set<String> set = new HashSet<>();
                 Iterator iterator = snapshot.getChildren().iterator();
+
                 while (iterator.hasNext()){
                     set.add(((DataSnapshot)iterator.next()).getKey());
                 }
+
                 list_of_groups.clear();
                 list_of_groups.addAll(set);
                 arrayAdapter.notifyDataSetChanged();
