@@ -22,15 +22,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
 
-    private Button LoginButton, PhoneLoginButton;
+    private Button LoginButton;
     private EditText UserEmail, UserPassword;
     private TextView NeedNewAccountLink, ForgetPasswordLink;
+
+    //private String deviceToken;
+
+    private DatabaseReference UsersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         InitializeFields();
 
@@ -75,22 +85,50 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                            if(task.isSuccessful()) {
 
-                               if(mAuth.getCurrentUser().isEmailVerified()){
-                                   SendUserToMainActivity();
-                                   Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
-                               }else{
-                                   Toast.makeText(LoginActivity.this, "Please verify your E-mail address first.", Toast.LENGTH_LONG).show();
-                                   mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                       @Override
-                                       public void onComplete(@NonNull Task<Void> task) {
-                                           if(task.isSuccessful()){
-                                               Toast.makeText(LoginActivity.this, "Verification E-mail sent successfully.", Toast.LENGTH_SHORT).show();
-                                           }else{
-                                               Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                           }
-                                       }
-                                   });
-                               }
+                               final String currentUserID = mAuth.getCurrentUser().getUid();
+
+                               FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this, new OnSuccessListener<InstanceIdResult>() {
+                                   @Override
+                                   public void onSuccess(InstanceIdResult instanceIdResult) {
+                                       String DeviceToken = instanceIdResult.getToken();
+                                       Log.e("newToken",DeviceToken);
+
+                                       UsersRef.child(currentUserID).child("device_token")
+                                               .setValue(DeviceToken)
+                                               .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                   @Override
+                                                   public void onComplete(@NonNull Task<Void> task) {
+                                                       if (task.isSuccessful()){
+
+
+                                                           if(mAuth.getCurrentUser().isEmailVerified()){
+                                                               SendUserToMainActivity();
+                                                               Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+                                                           }else{
+                                                               Toast.makeText(LoginActivity.this, "Please verify your E-mail address first.", Toast.LENGTH_LONG).show();
+                                                               mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                   @Override
+                                                                   public void onComplete(@NonNull Task<Void> task) {
+                                                                       if(task.isSuccessful()){
+                                                                           Toast.makeText(LoginActivity.this, "Verification E-mail sent successfully...", Toast.LENGTH_SHORT).show();
+                                                                       }else{
+                                                                           Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                                       }
+                                                                   }
+                                                               });
+                                                           }
+
+
+                                                       }
+                                                   }
+                                               });
+
+                                   }
+                               });
+
+
+
+
 
                            } else {
                                String message = task.getException().toString();
@@ -119,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
         NeedNewAccountLink = (TextView) findViewById(R.id.need_new_account_link);
         ForgetPasswordLink= (TextView) findViewById(R.id.forget_password_link);
         loadingBar = new ProgressDialog(this);
+
     }
 
 
