@@ -37,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String messageReceiverID, messageReceiverName, messageReceiverImage, messageSenderID;
+    private String messageReceiverID, messageReceiverName, messageReceiverImage, messageSenderID, visitTime;
     private TextView userName, userLastSeen;
     private CircleImageView userImage;
 
@@ -65,6 +65,7 @@ public class ChatActivity extends AppCompatActivity {
         messageReceiverID = getIntent().getExtras().get("visit_user_id").toString();
         messageReceiverName = getIntent().getExtras().get("visit_user_name").toString();
         messageReceiverImage = getIntent().getExtras().get("visit_image").toString();
+        visitTime = getIntent().getExtras().get("visit_time").toString();
 
         InitializeControllers();
 
@@ -113,7 +114,11 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        RootRef.child("Messages").child(messageSenderID).child(messageReceiverID)
+        if (visitTime.equals("1st")){
+
+            visitTime = "not1st";
+
+            RootRef.child("Messages").child(messageSenderID).child(messageReceiverID)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -145,6 +150,8 @@ public class ChatActivity extends AppCompatActivity {
 
                     }
                 });
+        }
+
     }
 
     private void SendMessage(){

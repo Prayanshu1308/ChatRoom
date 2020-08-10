@@ -65,8 +65,8 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                //because a user may or may not have a profile photo
                 if((snapshot.exists()) && (snapshot.hasChild("image"))){
+                    //because a user may or may not have a profile photo
 
                     String userImage = snapshot.child("image").getValue().toString();
                     String userName = snapshot.child("name").getValue().toString();
@@ -108,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
                         if (snapshot.hasChild(receiverUserId)){
                             String request_type = snapshot.child(receiverUserId).child("request_type").getValue().toString();
                             if (request_type.equals("sent")){
-                                Current_State = "request_state";
+                                Current_State = "request_sent";
                                 SendMessageRequestButton.setText("Cancel Chat Request");
                             }else if(request_type.equals("received")){
                                 Current_State = "request_received";

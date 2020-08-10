@@ -41,7 +41,7 @@ public class FindFriendsActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Find friends");
+        getSupportActionBar().setTitle("Find Friends");
 
     }
 
@@ -54,7 +54,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                 .setQuery(UsersRef, Contacts.class)
                 .build();
 
-        FirebaseRecyclerAdapter<Contacts, FindFriendViewHolder> adapter=
+        FirebaseRecyclerAdapter<Contacts, FindFriendViewHolder> adapter =
             new FirebaseRecyclerAdapter<Contacts, FindFriendViewHolder>(options){
                 @Override
                 protected void onBindViewHolder(@NonNull FindFriendViewHolder holder, final int position, @NonNull Contacts model) {
@@ -67,7 +67,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             String visit_user_id = getRef(position).getKey();
 
-                            Intent profileIntent = new Intent(FindFriendsActivity.this,ProfileActivity.class);
+                            Intent profileIntent = new Intent(FindFriendsActivity.this, ProfileActivity.class);
                             profileIntent.putExtra("visit_user_id",visit_user_id);
                             startActivity(profileIntent);
                         }

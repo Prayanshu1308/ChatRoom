@@ -99,6 +99,7 @@ public class ChatsFragment extends Fragment {
                                             chatIntent.putExtra("visit_user_id",usersIDs);
                                             chatIntent.putExtra("visit_user_name",retName);
                                             chatIntent.putExtra("visit_image", retImage[0]);
+                                            chatIntent.putExtra("visit_time","1st");
                                             startActivity(chatIntent);
                                         }
                                     });

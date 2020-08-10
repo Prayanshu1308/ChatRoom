@@ -17,8 +17,7 @@
             android:parentActivityName=".MainActivity"
             ></activity>
         <activity android:name=".ProfileActivity" />
-        <activity
-            android:name=".FindFriendsActivity"
+        <activity android:name=".FindFriendsActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".GroupChatActivity" />
         <activity
