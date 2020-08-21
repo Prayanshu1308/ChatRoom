@@ -100,7 +100,7 @@ public class RequestsFragment extends Fragment {
                                                 final String requestUserStatus = snapshot.child("status").getValue().toString();
 
                                                 holder.userName.setText(requestUserName);
-                                                holder.userStatus.setText("wants to connect with you");
+                                                holder.userStatus.setText("RECEIVED");
 
 
                                                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -215,6 +215,88 @@ public class RequestsFragment extends Fragment {
 
                                             }
                                         });
+                                    }
+                                    else if (type.equals("sent")){
+
+                                        UsersRef.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                if (snapshot.hasChild("image")){
+
+                                                    final String requestProfileImage = snapshot.child("image").getValue().toString();
+                                                    Picasso.get().load(requestProfileImage).into(holder.profileImage);
+
+                                                }
+
+                                                final String requestUserName = snapshot.child("name").getValue().toString();
+                                                final String requestUserStatus = snapshot.child("status").getValue().toString();
+
+                                                holder.userName.setText(requestUserName);
+                                                holder.userStatus.setText("SENT");
+
+
+                                                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        CharSequence options[] = new CharSequence[]
+                                                                {
+                                                                        "Cancel chat request"
+                                                                };
+
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                        builder.setTitle("Already sent request");
+
+                                                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                                if(i==0){
+
+                                                                    ChatRequestsRef.child(currentUserID).child(list_user_id)
+                                                                            .removeValue()
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                                                    if(task.isSuccessful()){
+
+                                                                                        ChatRequestsRef.child(list_user_id).child(currentUserID)
+                                                                                                .removeValue()
+                                                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                                    @Override
+                                                                                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                                                                                        if(task.isSuccessful()){
+
+                                                                                                            Toast.makeText(getContext(),"You have cancelled the chat request!",Toast.LENGTH_SHORT).show();
+
+                                                                                                        }
+
+                                                                                                    }
+                                                                                                });
+
+                                                                                    }
+
+                                                                                }
+                                                                            });
+
+                                                                }
+                                                            }
+                                                        });
+                                                        builder.show();
+
+                                                    }
+                                                });
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+
                                     }
                                 }
                             }

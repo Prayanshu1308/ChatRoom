@@ -27,6 +27,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
@@ -34,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout myTabLayout;
     private TabsAccessorAdapter myTabsAccessorAdapter;
 
-    private FirebaseUser currentUser;
+
     private FirebaseAuth mAuth;
     private DatabaseReference RootRef;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +49,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        RootRef = FirebaseDatabase.getInstance().getReference();
 
-        if(currentUser==null){
-            // that is, currentUser has no data,i.e, not created his account yet
-            SendUserToLoginActivity();
-        }else{
-            if(!currentUser.isEmailVerified()){
-                SendUserToLoginActivity();
-            }
-        }
+        RootRef = FirebaseDatabase.getInstance().getReference();
 
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
@@ -72,17 +68,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if(currentUser==null){
+            // that is, currentUser has no data,i.e, not created his account yet
             SendUserToLoginActivity();
         }else {
             if (!currentUser.isEmailVerified()) {
+
                 mAuth.signOut();
                 SendUserToLoginActivity();
             }else {
+                updateUserStatus("online");
                 // to check whether the user has a UserName or not
                 VerifyUserExistence();
             }
         }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //whenever app is pushed to background
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser!=null){
+            updateUserStatus("offline");
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // whenever app crashes
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser!=null){
+            updateUserStatus("offline");
+        }
+
     }
 
     private void VerifyUserExistence() {
@@ -113,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser!=null){
+            updateUserStatus("offline");
+        }
+
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -133,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         if (item.getItemId()==R.id.main_logout_options){
+            updateUserStatus("offline");
             mAuth.signOut();
             SendUserToLoginActivity();
         }
@@ -202,8 +237,35 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+
     public void SendUserToFindFriendsActivity(){
         Intent FindFriendsIntent = new Intent(MainActivity.this, FindFriendsActivity.class);
         startActivity(FindFriendsIntent);
     }
+
+
+    public void updateUserStatus(String state){
+
+        String saveCurrentTime, saveCurrentDate;
+
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd MMM,yyyy");
+        saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+        saveCurrentTime = currentTime.format(calendar.getTime());
+
+        HashMap<String, Object> onlineStateMap = new HashMap<>();
+        onlineStateMap.put("time",saveCurrentTime);
+        onlineStateMap.put("date",saveCurrentDate);
+        onlineStateMap.put("state",state);
+
+        currentUserId = mAuth.getCurrentUser().getUid();
+
+        RootRef.child("Users").child(currentUserId).child("userState")
+                .updateChildren(onlineStateMap);
+
+    }
+
 }

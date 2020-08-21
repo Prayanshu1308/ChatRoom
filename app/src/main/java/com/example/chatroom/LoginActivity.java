@@ -37,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText UserEmail, UserPassword;
     private TextView NeedNewAccountLink, ForgetPasswordLink;
 
-    //private String deviceToken;
-
     private DatabaseReference UsersRef;
 
     @Override
@@ -86,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                            if(task.isSuccessful()) {
 
                                final String currentUserID = mAuth.getCurrentUser().getUid();
-
                                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this, new OnSuccessListener<InstanceIdResult>() {
                                    @Override
                                    public void onSuccess(InstanceIdResult instanceIdResult) {
