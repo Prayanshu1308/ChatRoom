@@ -75,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
             SendUserToLoginActivity();
         }else {
             if (!currentUser.isEmailVerified()) {
-
                 mAuth.signOut();
                 SendUserToLoginActivity();
             }else {
                 updateUserStatus("online");
-                // to check whether the user has a UserName or not
                 VerifyUserExistence();
             }
         }
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd MMM,yyyy");
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMM-yyyy");
         saveCurrentDate = currentDate.format(calendar.getTime());
 
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");

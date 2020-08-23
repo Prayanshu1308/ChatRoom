@@ -18,34 +18,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/chat_toolbar"
-        android:layout_above="@+id/chat_linear_layout"/>
+        android:layout_above="@+id/chat_linear_layout"
+        android:layout_marginBottom="6dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chat_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
+        android:background="#30475e"
         android:layout_marginTop="5dp">
+
+        <ImageButton
+            android:id="@+id/send_files_btn"
+            android:layout_width="45dp"
+            android:layout_height="52dp"
+            android:src="@drawable/send_files"
+            android:layout_alignParentStart="true" />
 
         <EditText
             android:id="@+id/input_message"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_toEndOf="@+id/send_files_btn"
+            android:layout_toStartOf="@+id/send_message_btn"
             android:hint="type message here..."
+            android:textColorHint="#8db1ab"
             android:padding="15dp"
+            android:maxLines="5"
             android:textColor="#FFFFFF"/>
 
         <ImageButton
             android:id="@+id/send_message_btn"
-            android:layout_width="0dp"
-            android:layout_weight="0.15"
-            android:layout_height="55dp"
-            android:src="@drawable/send_message"/>
+            android:layout_width="55dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_baseline_send"
+            android:layout_alignParentEnd="true"
+            android:background="#30475e"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
