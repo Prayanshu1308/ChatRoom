@@ -233,7 +233,7 @@ public class ChatActivity extends AppCompatActivity {
                                 messageTextBody.put("type", checker);
                                 messageTextBody.put("from", messageSenderID);
                                 messageTextBody.put("to", messageReceiverID);
-                                messageTextBody.put("messageID", messagePushID);
+                                messageTextBody.put("messageId", messagePushID);
                                 messageTextBody.put("time", saveCurrentTime);
                                 messageTextBody.put("date", saveCurrentDate);
 
@@ -298,7 +298,7 @@ public class ChatActivity extends AppCompatActivity {
                             messageTextBody.put("type", checker);
                             messageTextBody.put("from", messageSenderID);
                             messageTextBody.put("to", messageReceiverID);
-                            messageTextBody.put("messageID", messagePushID);
+                            messageTextBody.put("messageId", messagePushID);
                             messageTextBody.put("time", saveCurrentTime);
                             messageTextBody.put("date", saveCurrentDate);
 
@@ -426,7 +426,7 @@ public class ChatActivity extends AppCompatActivity {
             messageTextBody.put("type", "text");
             messageTextBody.put("from", messageSenderID);
             messageTextBody.put("to", messageReceiverID);
-            messageTextBody.put("messageID", messagePushID);
+            messageTextBody.put("messageId", messagePushID);
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
 
